@@ -60,13 +60,22 @@ class GulpConfig {
       return { main, vendor };
     })();
 
-    this[src] = { fonts, js };
+    // CSS
+    const css = (() => {
+      const scssMain = this.srcPath(get(this[pkgConf], 'css.scssMain', '/scss/main.scss'));
+      const vendor = this.rootPath(get(this[pkgConf], 'css.vendor', []));
+
+      return { scssMain, vendor };
+    })();
+
+    this[src] = { fonts, js, css };
   }
 
   loadDest() {
     const js = this.destPath(get(this[pkgConf], 'dest.js', '/js/'));
+    const css = this.destPath(get(this[pkgConf], 'dest.css', '/css/'));
 
-    this[dest] = { js };
+    this[dest] = { js, css };
   }
 
   isProduction() {

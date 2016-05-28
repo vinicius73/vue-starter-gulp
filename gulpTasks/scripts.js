@@ -26,10 +26,11 @@ export default (config) => {
 
     return makeMainBundle(config)
           .pipe(gulpif(isProduction, uglify())).on('error', gutil.log)
-          .pipe(gulpif(isProduction, sourcemaps.write()))
+          .pipe(gulpif(!isProduction, sourcemaps.write()))
           .pipe(gulp.dest(dest));
   });
 
+  // VENDOR
   gulp.task('scripts:vendor', () => {
     const src = config.src().js.vendor;
     const dest = config.dest().js;
