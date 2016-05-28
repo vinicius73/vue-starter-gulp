@@ -74,8 +74,10 @@ class GulpConfig {
   loadDest() {
     const js = this.destPath(get(this[pkgConf], 'dest.js', '/js/'));
     const css = this.destPath(get(this[pkgConf], 'dest.css', '/css/'));
+    const images = this.destPath(get(this[pkgConf], 'dest.images', '/images/'));
+    const fonts = this.destPath(get(this[pkgConf], 'dest.fonts', '/fonts/'));
 
-    this[dest] = { js, css };
+    this[dest] = { js, css, images, fonts };
   }
 
   isProduction() {
