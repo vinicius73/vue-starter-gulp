@@ -1,6 +1,6 @@
-import gulp from "gulp";
+import gulp from 'gulp';
 
-import GulpConfig from "./gulp.config.js";
+import GulpConfig from './gulp.config.js';
 
 const Config = new GulpConfig();
 

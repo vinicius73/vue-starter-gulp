@@ -1,76 +1,74 @@
-import path from "path";
-import fs from "fs";
-import requireAll from "require-all";
-import { isArray, forEach, get } from "lodash";
-
-const req = require;
+import path from 'path';
+import requireAll from 'require-all';
+import { isArray, forEach, get } from 'lodash';
 
 const pathJoin = (base, _string) => {
   if (isArray(_string)) {
-    return _string.map(function (st) {
-      return pathJoin(base, st);
-    });
+    return _string.map((st) => pathJoin(base, st));
   }
 
   return path.join(base, _string);
 };
 
+const src = Symbol('src');
+const dest = Symbol('dest');
+const isProduction = Symbol('isProduction');
+const pkgConf = Symbol('pkgConf');
+
 class GulpConfig {
-  constructor(isProduction, PATH_ROOT, PATH_SRC, PATH_DEST) {
-    this._isProduction = isProduction || false;
-    this._src = undefined;
-    this._dest = undefined;
+  constructor(IS_PRODUCTION, PATH_ROOT, PATH_SRC, PATH_DEST) {
+    this[isProduction] = IS_PRODUCTION || false;
+    this[src] = undefined;
+    this[dest] = undefined;
 
     this.PATH_ROOT = PATH_ROOT || __dirname;
     this.PATH_SRC = pathJoin(this.PATH_ROOT, PATH_SRC || 'src');
     this.PATH_DEST = pathJoin(this.PATH_ROOT, PATH_DEST || 'dist');
 
-    this._pkgConf = require(pathJoin(this.PATH_ROOT, 'package.json'))["gulp-config"];
+    this[pkgConf] = require(pathJoin(this.PATH_ROOT, 'package.json'))['gulp-config'];
   }
 
   src() {
-    if(this._src === undefined) {
+    if (this[src] === undefined) {
       this.loadSrc();
     }
 
-    return this._src;
+    return this[src];
   }
 
   dest() {
-    if(this._dest === undefined) {
+    if (this[dest] === undefined) {
       this.loadDest();
     }
 
-    return this._dest;
+    return this[dest];
   }
 
   loadSrc() {
     // FONTS
     const fonts = (() => {
-      const fonts = get(this._pkgConf, 'fonts', []);
-      fonts.push(this.srcPath('/fonts/'));
-      return fonts.map(function (str) {
-        return `${str}**/*.{eot,svg,ttf,woff,woff2}`;
-      });
+      const list = get(this[pkgConf], 'fonts', []);
+      list.push(this.srcPath('/fonts/'));
+      return list.map((str) => `${str}**/*.{eot,svg,ttf,woff,woff2}`);
     })();
 
     // JS
     const js = (() => {
-      const main = this.srcPath(get(this._pkgConf, 'js.main', "/js/main.js"));
+      const main = this.srcPath(get(this[pkgConf], 'js.main', '/js/main.js'));
       return { main };
     })();
 
-    this._src = { fonts, js };
+    this[src] = { fonts, js };
   }
 
   loadDest() {
-    const js = this.destPath(get(this._pkgConf, 'dest.js', "/js/"));
+    const js = this.destPath(get(this[pkgConf], 'dest.js', '/js/'));
 
-    this._dest = { js };
+    this[dest] = { js };
   }
 
   isProduction() {
-    return this._isProduction;
+    return this[isProduction];
   }
 
   rootPath(value) {
@@ -85,10 +83,10 @@ class GulpConfig {
     return pathJoin(this.PATH_DEST, value);
   }
 
-  loadTasks(tasksPath = "gulpTasks") {
+  loadTasks(tasksPath = 'gulpTasks') {
     const tasks = requireAll(this.rootPath(tasksPath));
-    forEach(tasks, (task) => task.default(this))
-  };
+    forEach(tasks, (task) => task.default(this));
+  }
 }
 
 export default GulpConfig;
