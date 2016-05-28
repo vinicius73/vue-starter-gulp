@@ -55,7 +55,9 @@ class GulpConfig {
     // JS
     const js = (() => {
       const main = this.srcPath(get(this[pkgConf], 'js.main', '/js/main.js'));
-      return { main };
+      const vendor = this.rootPath(get(this[pkgConf], 'js.vendor', []));
+
+      return { main, vendor };
     })();
 
     this[src] = { fonts, js };

@@ -6,6 +6,7 @@ import sourcemaps from 'gulp-sourcemaps';
 import gutil from 'gulp-util';
 import uglify from 'gulp-uglify';
 import gulpif from 'gulp-if';
+import concat from 'gulp-concat';
 
 const makeMainBundle = (config) => {
   const entries = config.src().js.main;
@@ -18,6 +19,7 @@ const makeMainBundle = (config) => {
 };
 
 export default (config) => {
+  // MAIN
   gulp.task('scripts:main', () => {
     const isProduction = config.isProduction();
     const dest = config.dest().js;
@@ -26,5 +28,16 @@ export default (config) => {
           .pipe(gulpif(isProduction, uglify())).on('error', gutil.log)
           .pipe(gulpif(isProduction, sourcemaps.write()))
           .pipe(gulp.dest(dest));
+  });
+
+  gulp.task('scripts:vendor', () => {
+    const src = config.src().js.vendor;
+    const dest = config.dest().js;
+    const isProduction = config.isProduction();
+
+    return gulp.src(src)
+      .pipe(gulpif(isProduction, uglify())).on('error', gutil.log)
+      .pipe(concat('vendor.js'))
+      .pipe(gulp.dest(dest));
   });
 };
