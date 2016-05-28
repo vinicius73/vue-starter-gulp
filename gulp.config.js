@@ -12,6 +12,7 @@ const pathJoin = (base, _string) => {
 
 const src = Symbol('src');
 const dest = Symbol('dest');
+const watch = Symbol('watch');
 const isProduction = Symbol('isProduction');
 const pkgConf = Symbol('pkgConf');
 
@@ -20,6 +21,7 @@ class GulpConfig {
     this[isProduction] = IS_PRODUCTION || false;
     this[src] = undefined;
     this[dest] = undefined;
+    this[watch] = undefined;
 
     this.PATH_ROOT = PATH_ROOT || __dirname;
     this.PATH_SRC = pathJoin(this.PATH_ROOT, PATH_SRC || 'src');
@@ -42,6 +44,14 @@ class GulpConfig {
     }
 
     return this[dest];
+  }
+
+  watch() {
+    if (this[watch] === undefined) {
+      this.loadWatch();
+    }
+
+    return this[watch];
   }
 
   loadSrc() {
@@ -78,6 +88,13 @@ class GulpConfig {
     const fonts = this.destPath(get(this[pkgConf], 'dest.fonts', '/fonts/'));
 
     this[dest] = { js, css, images, fonts };
+  }
+
+  loadWatch() {
+    const js = this.src().js.main;
+    const scss = this.src().css.scssMain;
+
+    this[watch] = { js, scss };
   }
 
   isProduction() {
