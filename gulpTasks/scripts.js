@@ -44,4 +44,6 @@ export default (config) => {
       .pipe(concat('vendor.js'))
       .pipe(gulp.dest(dest));
   });
+
+  gulp.task('scripts', ['scripts:main', 'scripts:vendor']);
 };

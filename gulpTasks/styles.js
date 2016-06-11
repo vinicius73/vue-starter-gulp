@@ -19,4 +19,6 @@ export default (config) => {
       .pipe(gulpif(!isProduction, sourcemaps.write()))
       .pipe(gulp.dest(dest));
   });
+
+  gulp.task('styles', ['styles:scss']);
 };

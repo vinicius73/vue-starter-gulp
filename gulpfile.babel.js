@@ -6,4 +6,4 @@ const Config = new GulpConfig();
 
 Config.loadTasks();
 
-gulp.task('default', ['scripts:main']);
+gulp.task('default', ['scripts', 'copy', 'styles']);
