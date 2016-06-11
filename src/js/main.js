@@ -1,5 +1,7 @@
-// import Vue from 'vue';
+import Vue from 'vue';
+import App from './App.vue';
 
-// new Vue({
-//   el: 'body',
-// });
+new Vue({
+  components: { App },
+  el: 'body',
+});

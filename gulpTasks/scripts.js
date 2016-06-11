@@ -8,11 +8,14 @@ import uglify from 'gulp-uglify';
 import gulpif from 'gulp-if';
 import concat from 'gulp-concat';
 
+
 const makeMainBundle = (config) => {
   const entries = config.src().js.main;
   const debug = !config.isProduction();
 
   return browserify({ entries, debug })
+          .transform('vueify')
+          .transform('babelify', { presets: ['es2015'] })
           .bundle()
           .pipe(source('main.js'))
           .pipe(buffer());
