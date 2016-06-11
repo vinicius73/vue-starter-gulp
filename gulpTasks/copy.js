@@ -12,5 +12,13 @@ export default (config) => {
       .pipe(gulp.dest(dest));
   });
 
-  gulp.task('copy', ['copy:fonts']);
+  gulp.task('copy:html', () => {
+    const dest = config.dest().path;
+    const src = config.src().html;
+
+    return gulp.src(src)
+      .pipe(gulp.dest(dest));
+  });
+
+  gulp.task('copy', ['copy:fonts', 'copy:html']);
 };

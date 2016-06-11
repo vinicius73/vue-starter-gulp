@@ -78,7 +78,9 @@ class GulpConfig {
       return { scssMain, vendor };
     })();
 
-    this[src] = { fonts, js, css };
+    const html = this.srcPath('**/*.html');
+
+    this[src] = { fonts, js, css, html, path: this.srcPath('') };
   }
 
   loadDest() {
@@ -87,7 +89,7 @@ class GulpConfig {
     const images = this.destPath(get(this[pkgConf], 'dest.images', '/images/'));
     const fonts = this.destPath(get(this[pkgConf], 'dest.fonts', '/fonts/'));
 
-    this[dest] = { js, css, images, fonts };
+    this[dest] = { js, css, images, fonts, path: this.destPath('') };
   }
 
   loadWatch() {
