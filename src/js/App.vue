@@ -1,3 +1,3 @@
 <template>
-  <h1>Yo</h1>
+  <h1>Yo +8000</h1>
 </template>
